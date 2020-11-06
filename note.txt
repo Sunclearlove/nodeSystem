@@ -1,0 +1,9 @@
+npm init 
+
+npm install express 安装express框架
+npm install mongoose 
+
+npm install gravatar 安裝頭像
+
+npm install jsonwebtoken 获取token
+jwt.sign() 
