@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 var bodyParser = require('body-parser')
 const passport = require('passport')
 const app = express()
-
+mongoose.set('useFindAndModify', false)
 
 // 引入mongoDB数据库地址
 const db = require('./config/keys').mongUrl
@@ -19,8 +19,10 @@ app.use(bodyParser.json())
 
 // 引入路由地址
 const users = require('./router/api/users')
+const profiles = require('./router/api/profiles')
 // 使用路由中间件
 app.use('/api/user', users)
+app.use('/api/profiles', profiles)
 
 // passport 初始化
 app.use(passport.initialize())
