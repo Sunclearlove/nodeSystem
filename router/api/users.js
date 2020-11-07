@@ -25,6 +25,7 @@ router.post('/register', (req, res) => {
         email: req.body.email,
         avatar: url,
         password: req.body.password,
+        identity: req.body.identity
       })
       bcrypt.genSalt(10, function(err, salt){
         bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -49,7 +50,7 @@ router.post('/login', (req, res) => {
       bcrypt.compare(password, user.password).then( (result) => {
         if (result) {
           // jwt.sign("规则","加密名字", "过期时间", "箭头函数")
-          const rules = {id: user.id, name: user.id}
+          const rules = {id: user.id, name: user.id, avatar: user.avatar,identity: user.identity}
           jwt.sign(rules, keys.secretorKey,{expiresIn: 7200}, (err, token) => {
             if (err) throw err
             res.json({
@@ -71,7 +72,8 @@ router.get('/current', passport.authenticate('jwt', { session: false }), (req, r
   res.json({
     id: req.user.id,
     name: req.user.name,
-    email: req.user.email
+    email: req.user.email,
+    identity: req.user.identity
   })
 })
 
