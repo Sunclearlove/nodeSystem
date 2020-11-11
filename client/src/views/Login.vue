@@ -23,7 +23,7 @@
 </template>
 
 <script>
-// import jwt_decode from "jwt-decode";
+import jwt_decode from "jwt-decode";
 
 export default {
   name: "login",
@@ -56,6 +56,17 @@ export default {
           this.$axios.post("/api/user/login", this.loginUser).then(res => {
             // 登录成功
             console.log(res)
+
+            const { token } = res.data
+            localStorage.setItem('eleToken', token)
+            // 解析token
+            const decode = jwt_decode(token)
+
+            // 存储数据
+            console.log(decode)
+            this.$store.dispatch("setIsAutnenticated", !this.isEmpty(decode))
+            this.$store.dispatch("setUser", decode)
+
             this.$router.push("/index")
           })
         } else {
@@ -63,6 +74,14 @@ export default {
           return false
         }
       });
+    },
+    isEmpty(value) {
+      return (
+        value === undefined ||
+        value === null ||
+        (typeof value === "object" && Object.keys(value).length === 0) ||
+        (typeof value === "string" && value.trim().length === 0)
+      );
     }
   }
 }
